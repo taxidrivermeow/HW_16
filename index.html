@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Title</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<style>
+		table, th, td{
+            border: 1px solid black;
+            border-collapse: collapse;
+		}
+		th, td:last-child{
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<table id="database-table" class="table table-striped"></table>
+	<a href="#" onclick="showMarriedOnly(database)">Show married</a><br>
+	<a href="#" onclick="showUnmarriedOnly(database)">Show unmarried</a>
+  <script src="js/script.js"></script>
+</body>
+</html>
