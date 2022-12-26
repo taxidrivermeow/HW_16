@@ -13,11 +13,11 @@ let sortByNameDirection = 1;
 let sortByCountryDirection = 1;
 let actualArr = [];
 
-function tableRender(array) {
+function tableRender(array, isSort = 0) {
     actualArr = [...array];
     let averageAge = 0;
     let personCount = 0;
-    const tableHeader = '<tr>' +
+    const tableHeader = '<tr class="table-active">' +
         '<th>#</th>' +
         '<th><a href="#" onclick="sortByName(actualArr)">Name</a></th>' +
         '<th><a href="#" onclick="sortByCountry(actualArr)">Country</a></th>' +
@@ -39,9 +39,34 @@ function tableRender(array) {
             '</svg></a></td>' +
             '</tr>';
     });
-    const averageString = '<tr><td></td><td><b>Average</b></td><td></td><td>' + (averageAge / personCount) + '</td><td></td></tr>';
+    const averageString = '<tr class="table-active"><td></td><td><b>Average</b></td><td></td><td>' + (averageAge / personCount) + '</td><td></td><td></td></tr>';
 
     document.getElementById('database-table').innerHTML = tableHeader + str.join('') + averageString;
+
+    if (!isSort) {
+        showCountryStat(1);
+        showCountryStat(0);
+    }
+}
+
+function statTableRender(array, isFullStat) {
+    const countries = Object.keys(array);
+    const captionText = (isFullStat)? 'Full data stat': 'Current table stat';
+    const tableHeader = '<caption>' + captionText + '</caption>' +
+        '<tr class="table-active">' +
+        '<th>#</th>' +
+        '<th>Country</th>' +
+        '<th>Count</th></tr>';
+
+    const str = countries.map(function (value, index){
+        return '<tr>' +
+            '<td>' + (index + 1) + '</td>' +
+            '<td>' + value + '</td>' +
+            '<td>' + array[value] + '</td>';
+    });
+
+    const tablePaste = (isFullStat)? 'full-country-stat-table' : 'current-country-stat-table';
+    document.getElementById(tablePaste).innerHTML = tableHeader + str.join('');
 }
 
 function sortByName(array) {
@@ -68,7 +93,7 @@ function sortByName(array) {
         });
     }
 
-    tableRender(sortedArr);
+    tableRender(sortedArr, 1);
 }
 
 function sortByCountry(array) {
@@ -95,7 +120,7 @@ function sortByCountry(array) {
         });
     }
 
-    tableRender(sortedArr);
+    tableRender(sortedArr, 1);
 }
 
 function sortByAge(array) {
@@ -112,7 +137,7 @@ function sortByAge(array) {
         });
     }
 
-    tableRender(sortedArr);
+    tableRender(sortedArr, 1);
 }
 
 function sortByIsMarried(array) {
@@ -129,7 +154,7 @@ function sortByIsMarried(array) {
         });
     }
 
-    tableRender(sortedArr);
+    tableRender(sortedArr, 1);
 }
 
 function deleteUser(array, id) {
@@ -170,6 +195,20 @@ function showUnmarriedOnly(array){
 
 function showAll(array) {
     tableRender(array);
+}
+
+function showCountryStat(isFullStat) {
+    const array = isFullStat ? database : actualArr;
+    const countryArr = array.reduce(function (accumulator, value) {
+        if(accumulator[value.country] === undefined) {
+            accumulator[value.country] = 1;
+        } else {
+            accumulator[value.country]++;
+        }
+        return accumulator;
+    }, {});
+
+    statTableRender(countryArr, isFullStat);
 }
 
 onload(tableRender(database));
