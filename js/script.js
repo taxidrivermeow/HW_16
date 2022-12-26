@@ -1,27 +1,28 @@
 const database = [
-    {name: "John", country: "Israel", age: 19, isMarried: true},
-    {name: "Mary", country: "Israel", age: 29, isMarried: false},
-    {name: "Bill", country: "Belgium", age: 10, isMarried: false},
-    {name: "Jane", country: "France", age: 30, isMarried: true},
-    {name: "Hanna", country: "France", age: 9, isMarried: false},
-    {name: "George", country: "Israel", age: 80, isMarried: true}
+    {id: 1, name: "John", country: "Israel", age: 19, isMarried: true},
+    {id: 2, name: "Mary", country: "Israel", age: 29, isMarried: false},
+    {id: 3, name: "Bill", country: "Belgium", age: 10, isMarried: false},
+    {id: 4, name: "Jane", country: "France", age: 30, isMarried: true},
+    {id: 5, name: "Hanna", country: "France", age: 9, isMarried: false},
+    {id: 6, name: "George", country: "Israel", age: 80, isMarried: true}
 ];
 
 let sortByAgeDirection = 1;
 let sortByIsMarriedDirection = 1;
 let sortByNameDirection = 1;
 let sortByCountryDirection = 1;
-// let sortedArr = [];
+let actualArr = [];
 
 function tableRender(array) {
+    actualArr = [...array];
     let averageAge = 0;
     let personCount = 0;
     const tableHeader = '<tr>' +
         '<th>#</th>' +
-        '<th><a href="#" onclick="sortByName(database)">Name</a></th>' +
-        '<th><a href="#" onclick="sortByCountry(database)">Country</a></th>' +
-        '<th><a href="#" onclick="sortByAge(database)">Age</a></th>' +
-        '<th><a href="#" onclick="sortByIsMarried(database)">isMarried</a></th>' +
+        '<th><a href="#" onclick="sortByName(actualArr)">Name</a></th>' +
+        '<th><a href="#" onclick="sortByCountry(actualArr)">Country</a></th>' +
+        '<th><a href="#" onclick="sortByAge(actualArr)">Age</a></th>' +
+        '<th><a href="#" onclick="sortByIsMarried(actualArr)">isMarried</a></th>' +
         '<th>Delete</th></tr>';
     const str = array.map(function (value, index) {
         averageAge += value.age;
@@ -32,7 +33,7 @@ function tableRender(array) {
             '<td>' + value.country + '</td>' +
             '<td>' + value.age + '</td>' +
             '<td>' + value.isMarried +'</td>' +
-            '<td><a href="#" onclick="deleteUser(database, ' + index + ')">' +
+            '<td><a href="#" onclick="deleteUser(database, ' + value.id + ')">' +
             '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">' +
             '<path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>' +
             '</svg></a></td>' +
@@ -131,9 +132,24 @@ function sortByIsMarried(array) {
     tableRender(sortedArr);
 }
 
-function deleteUser(array, index) {
-    array.splice(index, 1);
-    tableRender(array);
+function deleteUser(array, id) {
+    let delIndex = 0;
+    array.forEach(function (value, index) {
+        if (value.id === id) {
+            delIndex = index;
+        }
+    });
+    array.splice(delIndex, 1);
+
+    delIndex = 0;
+    actualArr.forEach(function (value, index) {
+        if (value.id === id) {
+            delIndex = index;
+        }
+    });
+    actualArr.splice(delIndex, 1)
+
+    tableRender(actualArr);
 }
 
 function showMarriedOnly(array){
@@ -150,6 +166,10 @@ function showUnmarriedOnly(array){
     });
 
     tableRender(sortedArr);
+}
+
+function showAll(array) {
+    tableRender(array);
 }
 
 onload(tableRender(database));
