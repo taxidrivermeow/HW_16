@@ -73,6 +73,7 @@ function sortByWord(array, column) {
     let sortedArr = [];
     let returnValue = 1;
     let columnName = '';
+
     if (column === 'name') {
         returnValue = (sortByNameDirection)?1:-1;
         sortByNameDirection = !sortByNameDirection;
@@ -147,17 +148,9 @@ function deleteUser(array, id) {
     tableRender(actualArr);
 }
 
-function showMarriedOnly(array){
+function showMarried(array, married){
     let sortedArr = array.filter(function (value) {
-        if (value.isMarried) return value;
-    });
-
-    tableRender(sortedArr);
-}
-
-function showUnmarriedOnly(array){
-    let sortedArr = array.filter(function (value) {
-        if (!value.isMarried) return value;
+        if (value.isMarried === married) return value;
     });
 
     tableRender(sortedArr);
