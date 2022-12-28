@@ -21,8 +21,8 @@ function tableRender(array, isSort = 0) {
         '<th>#</th>' +
         '<th><a href="#" onclick="sortByWord(actualArr, \'name\')">Name</a></th>' +
         '<th><a href="#" onclick="sortByWord(actualArr, \'country\')">Country</a></th>' +
-        '<th><a href="#" onclick="sortByAge(actualArr)">Age</a></th>' +
-        '<th><a href="#" onclick="sortByIsMarried(actualArr)">isMarried</a></th>' +
+        '<th><a href="#" onclick="sortByNumber(actualArr, \'age\')">Age</a></th>' +
+        '<th><a href="#" onclick="sortByNumber(actualArr, \'isMarried\')">isMarried</a></th>' +
         '<th>Delete</th></tr>';
     const str = array.map(function (value, index) {
         averageAge += value.age;
@@ -97,34 +97,30 @@ function sortByWord(array, column) {
     tableRender(sortedArr, 1);
 }
 
-function sortByAge(array) {
+function sortByNumber(array, column) {
     let sortedArr = [];
-    if (sortByAgeDirection) {
-        sortByAgeDirection = 0;
-        sortedArr = array.sort(function (a, b) {
-            return a.age - b.age;
-        });
-    } else {
-        sortByAgeDirection = 1;
-        sortedArr = array.sort(function (a, b) {
-            return b.age - a.age;
-        });
+    let columnName = '';
+    let sortDirection = 1;
+
+    if (column === 'age') {
+        sortDirection = sortByAgeDirection;
+        sortByAgeDirection = !sortByAgeDirection;
+        columnName = 'age';
     }
 
-    tableRender(sortedArr, 1);
-}
+    if (column === 'isMarried') {
+        sortDirection = sortByIsMarriedDirection;
+        sortByIsMarriedDirection = !sortByIsMarriedDirection;
+        columnName = 'isMarried';
+    }
 
-function sortByIsMarried(array) {
-    let sortedArr = [];
-    if (sortByIsMarriedDirection) {
-        sortByIsMarriedDirection = 0;
+    if (sortDirection) {
         sortedArr = array.sort(function (a, b) {
-            return a.isMarried - b.isMarried;
+            return a[columnName] - b[columnName];
         });
     } else {
-        sortByIsMarriedDirection = 1;
         sortedArr = array.sort(function (a, b) {
-            return b.isMarried - a.isMarried;
+            return b[columnName] - a[columnName];
         });
     }
 
