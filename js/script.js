@@ -19,8 +19,8 @@ function tableRender(array, isSort = 0) {
     let personCount = 0;
     const tableHeader = '<tr class="table-active">' +
         '<th>#</th>' +
-        '<th><a href="#" onclick="sortByName(actualArr)">Name</a></th>' +
-        '<th><a href="#" onclick="sortByCountry(actualArr)">Country</a></th>' +
+        '<th><a href="#" onclick="sortByWord(actualArr, \'name\')">Name</a></th>' +
+        '<th><a href="#" onclick="sortByWord(actualArr, \'country\')">Country</a></th>' +
         '<th><a href="#" onclick="sortByAge(actualArr)">Age</a></th>' +
         '<th><a href="#" onclick="sortByIsMarried(actualArr)">isMarried</a></th>' +
         '<th>Delete</th></tr>';
@@ -69,56 +69,30 @@ function statTableRender(array, isFullStat) {
     document.getElementById(tablePaste).innerHTML = tableHeader + str.join('');
 }
 
-function sortByName(array) {
+function sortByWord(array, column) {
     let sortedArr = [];
-    if (sortByNameDirection){
-        sortByNameDirection = 0;
-        sortedArr = array.sort(function (a, b) {
-            const firstName = a.name.toLowerCase();
-            const secondName = b.name.toLowerCase();
-
-            if (firstName > secondName) return 1;
-            if (firstName < secondName) return -1;
-            if (firstName === secondName) return 0;
-        });
-    } else {
-        sortByNameDirection = 1;
-        sortedArr = array.sort(function (a, b) {
-            const firstName = a.name.toLowerCase();
-            const secondName = b.name.toLowerCase();
-
-            if (firstName > secondName) return -1;
-            if (firstName < secondName) return 1;
-            if (firstName === secondName) return 0;
-        });
+    let returnValue = 1;
+    let columnName = '';
+    if (column === 'name') {
+        returnValue = (sortByNameDirection)?1:-1;
+        sortByNameDirection = !sortByNameDirection;
+        columnName = 'name';
     }
 
-    tableRender(sortedArr, 1);
-}
-
-function sortByCountry(array) {
-    let sortedArr = [];
-    if (sortByCountryDirection){
-        sortByCountryDirection = 0;
-        sortedArr = array.sort(function (a, b) {
-            const firstCountry = a.country.toLowerCase();
-            const secondCountry = b.country.toLowerCase();
-
-            if (firstCountry > secondCountry) return 1;
-            if (firstCountry < secondCountry) return -1;
-            if (firstCountry === secondCountry) return 0;
-        });
-    } else {
-        sortByCountryDirection = 1;
-        sortedArr = array.sort(function (a, b) {
-            const firstCountry = a.country.toLowerCase();
-            const secondCountry = b.country.toLowerCase();
-
-            if (firstCountry > secondCountry) return -1;
-            if (firstCountry < secondCountry) return 1;
-            if (firstCountry === secondCountry) return 0;
-        });
+    if (column === 'country') {
+        returnValue = (sortByCountryDirection)?1:-1;
+        sortByCountryDirection = !sortByCountryDirection;
+        columnName = 'country';
     }
+
+    sortedArr = array.sort(function (a, b) {
+        const firstWord = a[columnName].toLowerCase();
+        const secondWord = b[columnName].toLowerCase();
+
+        if (firstWord > secondWord) return returnValue;
+        if (firstWord < secondWord) return -returnValue;
+        if (firstWord === secondWord) return 0;
+    });
 
     tableRender(sortedArr, 1);
 }
